@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Model } from 'src/model/model.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class Format {
@@ -7,4 +8,7 @@ export class Format {
 
   @Column()
   extension: string;
+
+  @OneToMany(() => Model, (model) => model.format)
+  models: Model[];
 }

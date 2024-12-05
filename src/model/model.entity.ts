@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { TelegramUser } from '../telegram-user/telegram-user.entity';
 import { Format } from '../format/format.entity';
 import { Category } from '../category/category.entity';
 import { Like } from '../like/like.entity';
+import { Download } from 'src/download/download.entity';
 
 @Entity()
 export class Model {
@@ -12,22 +13,24 @@ export class Model {
   @Column()
   title: string;
 
-  @Column()
+  @Column('text', { nullable: true })
   description: string;
 
   @Column('bytea') // Storing binary data for models
   modelBinary: Buffer;
 
-  @ManyToOne(() => Format, (format) => format.formatID)
-  modelFormat: Format;
+  @ManyToOne(() => Format, (format) => format.models)
+  format: Format;
 
-  @ManyToOne(() => Category, (category) => category.categoryID)
+  @ManyToOne(() => Category, (category) => category.models)
   category: Category;
 
-  @ManyToOne(() => TelegramUser, (user) => user.userId)
+  @ManyToOne(() => TelegramUser, (user) => user.models)
   owner: TelegramUser;
 
-  @ManyToMany(() => Like)
-  @JoinTable()
+  @OneToMany(() => Like, (like)=> like.model)
   likes: Like[]
+
+  @OneToMany(() => Download, (download)=> download.model)
+  downloads: Download[]
 }

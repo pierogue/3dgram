@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { TelegramUser } from 'src/telegram-user/telegram-user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, Unique } from 'typeorm';
 
+@Unique(["roleName"])
 @Entity()
 export class Role {
   @PrimaryGeneratedColumn()
@@ -7,4 +9,7 @@ export class Role {
 
   @Column()
   roleName: string;
+
+  @OneToMany(() => TelegramUser, (user) => user.role)
+  users: TelegramUser[];
 }
